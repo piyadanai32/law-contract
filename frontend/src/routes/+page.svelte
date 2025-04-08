@@ -1,5 +1,5 @@
 <script>
-
+  import { onMount } from "svelte";
   import SocialLogin from "$lib/SocialLogin.svelte";
   import { goto } from "$app/navigation";
   import { browser } from "$app/environment";
@@ -111,6 +111,11 @@
     error = "Failed to authenticate with Facebook. Please try again.";
     loading = false;
   }
+  onMount(() => {
+  if (browser && localStorage.getItem("sessionToken")) {
+    goto("/home");
+  }
+});
 </script>
 
 <div class="container">
