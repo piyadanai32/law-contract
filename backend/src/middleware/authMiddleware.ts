@@ -1,32 +1,21 @@
-import { Context } from "hono";
 import jwt from "jsonwebtoken";
 
-const jwtSecret = process.env.JWT_SECRET;
-if (!jwtSecret) {
-  throw new Error("JWT_SECRET is not defined");
-}
-
-export const authMiddleware = async (c: Context, next: Function) => {
+export const authMiddleware = async (c: any, next: any) => {
   try {
     const authHeader = c.req.header("Authorization");
+    
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return c.json({ error: "Unauthorized" }, 401);
     }
-
-    const token = authHeader.split(" ")[1];
-    if (!token) {
-      return c.json({ error: "Unauthorized" }, 401);
-    }
-
-    const payload = jwt.verify(token, jwtSecret) as any;
-    if (!payload) {
-      return c.json({ error: "Unauthorized" }, 401);
-    }
-
-    c.set("user", payload);
+    
+    const token = authHeader.substring(7);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!);
+    
+    // เก็บข้อมูลผู้ใช้ใน context
+    c.set("user", decoded);
+    
     await next();
   } catch (error) {
-    console.error("Authentication error:", error);
-    return c.json({ error: "Unauthorized" }, 401);
+    return c.json({ error: "Invalid or expired token" }, 401);
   }
 };

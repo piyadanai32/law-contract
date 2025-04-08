@@ -5,7 +5,7 @@ import { authMiddleware } from "../middleware/authMiddleware";
 const documentsRoute = new Hono();
 
 documentsRoute.post("/add", addDocument);
-documentsRoute.get("/", getDocumentById);
+documentsRoute.get("/",authMiddleware, getDocumentById);
 documentsRoute.get("/all",authMiddleware, getAllDocument);
 
 export default documentsRoute;
