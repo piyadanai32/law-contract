@@ -2,7 +2,6 @@
   import { createEventDispatcher, onMount } from "svelte";
   import { authStore } from '$lib/stores/authStore';
   import { goto } from '$app/navigation';
-  import { get } from 'svelte/store';
 
   export let links: {
     href: string;
@@ -51,10 +50,8 @@
 
   function handleAuth() {
     if (isLoggedIn) {
-      // If already logged in, log out
       logout();
     } else {
-      // If not logged in, redirect to login page
       goto('/');
     }
   }
