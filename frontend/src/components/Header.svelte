@@ -1,12 +1,28 @@
 <script>
+  import { authStore } from '$lib/stores/authStore';
+  import { goto } from '$app/navigation';
+  import { get } from 'svelte/store';
+
   export let title = "ระบบงานเอกสารสัญญาทางกฏหมาย";
-  export let subtitle =
-    "สาขาวิชานิติศาสตร์ มหาวิทยาลัยราชภัฏบุรีรัมย์";
+  export let subtitle = "สาขาวิชานิติศาสตร์ มหาวิทยาลัยราชภัฏบุรีรัมย์";
+
+  function logout() {
+    authStore.logout();
+    goto('/');
+  }
 </script>
 
 <header>
   <h1 class="text-xl">{title}</h1>
   <p class="text-sm">{subtitle}</p>
+  <!-- <div class ="user-menu">
+    {#if $authStore.user}
+      <span class="user-name">{$authStore.user.name}</span>
+      <button class="logout-btn" on:click={logout}>
+        <i class="fa-solid fa-sign-out-alt"></i> ออกจากระบบ
+      </button>
+    {/if}
+  </div> -->
 </header>
 
 <style>

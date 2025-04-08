@@ -8,6 +8,13 @@ declare global {
 		// interface PageState {}
 		// interface Platform {}
 	}
+
+	// เพิ่มการประกาศสำหรับ svelte slot ตรงนี้
+	namespace svelte.JSX {
+		interface HTMLAttributes<T> {
+			slot?: string;
+		}
+	}
 }
 
 export {};

@@ -1,5 +1,8 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
+  import { authStore } from '$lib/stores/authStore';
+  import { goto } from '$app/navigation';
+  import { get } from 'svelte/store';
 
   export let links: {
     href: string;
@@ -13,6 +16,14 @@
   }[] = [];
 
   export let isOpen: boolean = false;
+
+  interface AuthStoreType {
+    isAuthenticated: boolean;
+    loading: boolean;
+    // user: User | null;
+    initialize: () => void;
+    logout: () => void;
+  }
 
   //breadcrumb
   const dispatch = createEventDispatcher();
@@ -29,9 +40,28 @@
   //login
   let isLoggedIn = false;
 
-  function handleLogin() {
-    isLoggedIn = !isLoggedIn;
-    dispatch("loginToggle", { isLoggedIn });
+  // Subscribe to the auth store to get current login state
+  onMount(() => {
+    const unsubscribe = authStore.subscribe(auth => {
+      isLoggedIn = !!auth.token;
+    });
+
+    return unsubscribe;
+  });
+
+  function handleAuth() {
+    if (isLoggedIn) {
+      // If already logged in, log out
+      logout();
+    } else {
+      // If not logged in, redirect to login page
+      goto('/');
+    }
+  }
+  
+  function logout() {
+    authStore.logout();
+    goto('/');
   }
 </script>
 
@@ -72,9 +102,11 @@
   </ul>
 
   <ul class="menu login">
+    <span class="user-name">{$authStore.user ? $authStore.user.name : 'Guest'}</span>
     <hr />
+
     <li>
-      <button class="menu-item" on:click={handleLogin}>
+      <button class="menu-item" on:click={handleAuth}>
         <i class="icon fas fa-sign-in-alt"></i>
         {isLoggedIn ? "ออกจากระบบ" : "เข้าสู่ระบบ"}
       </button>
