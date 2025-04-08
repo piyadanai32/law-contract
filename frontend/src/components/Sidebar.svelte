@@ -102,9 +102,8 @@
   </ul>
 
   <ul class="menu login">
-    <span class="user-name">{$authStore.user ? $authStore.user.name : 'Guest'}</span>
+    <h1 class="user-name">{$authStore.user ? $authStore.user.name : 'Guest'}</h1>
     <hr />
-
     <li>
       <button class="menu-item" on:click={handleAuth}>
         <i class="icon fas fa-sign-in-alt"></i>
@@ -126,6 +125,17 @@
 
   .sidebar.is-open {
     display: block;
+  }
+  h1.user-name {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #333;
+  }
+  hr {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin: 0.5rem 0;
   }
 
   @media (max-width: 768px) {

@@ -44,7 +44,7 @@
         localStorage.setItem("sessionToken", data.token);
       }
 
-      goto("/dashboard");
+      goto("/home");
     } catch (err) {
       console.error("Google authentication error:", err);
       error = "Failed to complete authentication. Please try again.";
@@ -88,7 +88,7 @@
 
     const data = await response.json();
     localStorage.setItem("sessionToken", data.token);
-    goto("/dashboard");
+    goto("/home");
   } catch (err) {
     console.error("Facebook authentication error:", err);
     error = "Failed to complete authentication. Please try again.";
